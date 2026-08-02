@@ -41,3 +41,6 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# API key
+ai_coach.log

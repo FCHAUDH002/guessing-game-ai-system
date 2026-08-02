@@ -2,6 +2,7 @@ import random
 import streamlit as st
 
 from logic_utils import check_guess, get_proximity_hint
+from ai_coach import retrieve_tips, generate_ai_coach_message
 
 def get_range_for_difficulty(difficulty: str):
     if difficulty == "Easy":
@@ -160,6 +161,18 @@ if submit:
             attempt_number=st.session_state.attempts,
         )
 
+        # --- AI Coach block moved here, inside the else, using local outcome/guess_int ---
+        if outcome != "Win":
+            proximity = get_proximity_hint(guess_int, st.session_state.secret)
+            tips = retrieve_tips(
+                proximity, attempt_limit - st.session_state.attempts,
+                attempt_limit, guess_int, st.session_state.history
+            )
+            coach_message = generate_ai_coach_message(
+                outcome, proximity, tips, attempt_limit - st.session_state.attempts
+            )
+            st.write(f"🤖 **Coach:** {coach_message}")
+
         if outcome == "Win":
             st.balloons()
             st.session_state.status = "won"
@@ -175,6 +188,3 @@ if submit:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
-
-st.divider()
-st.caption("Built by an AI that claims this code is production-ready.")
