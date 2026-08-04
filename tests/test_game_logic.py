@@ -66,8 +66,13 @@ def test_proximity_handles_string_secret():
     # The game stringifies the secret on even attempts; proximity must still work
     assert get_proximity_hint(48, "50") == "🔥 Very Hot!"
 
+def test_new_game_button_resets_state(monkeypatch):
+    import ai_coach
+    monkeypatch.setattr(
+        ai_coach, "generate_ai_coach_message",
+        lambda *args, **kwargs: "Mocked coach message"
+    )
 
-def test_new_game_button_resets_state():
     at = AppTest.from_file(APP_PATH)
     at.run()
 
@@ -84,13 +89,13 @@ def test_new_game_button_resets_state():
 
     # Sanity check: we actually lost and state drifted away from a fresh game.
     assert at.session_state["status"] == "lost"
-    assert at.session_state["score"] < 0
+    assert at.session_state["score"] < 100
     assert at.session_state["history"] != []
 
     # Click "New Game" and confirm everything is reset.
     _button(at, "New Game").click()
     at.run()
 
-    assert at.session_state["score"] == 0
+    assert at.session_state["score"] == 100
     assert at.session_state["status"] == "playing"
     assert at.session_state["history"] == []

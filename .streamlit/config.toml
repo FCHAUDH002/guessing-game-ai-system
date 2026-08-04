@@ -1,0 +1,8 @@
+[theme]
+# Candy Light (blue) theme — keeps Streamlit's built-in widgets (inputs, menus,
+# dropdowns) consistent with the blue pastel look defined in app.py.
+base = "light"
+primaryColor = "#2575fc"
+backgroundColor = "#e6f0ff"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#1e3a5f"
