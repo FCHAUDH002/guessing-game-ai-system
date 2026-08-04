@@ -15,25 +15,16 @@ def parse_guess(raw: str):
 def check_guess(guess, secret):
     """
     Compare guess to secret and return (outcome, message).
-
     outcome examples: "Win", "Too High", "Too Low"
     """
-    if guess == secret:
-        return "Win", "🎉 Correct!"
+    guess_val = int(guess)
+    secret_val = int(secret)
 
-    # FIX: Hint messages were swapped, fixed with Claude Code and verified with new tests
-    try:
-        if guess > secret:
-            return "Too High", "📉 Go LOWER!"
-        else:
-            return "Too Low", "📈 Go HIGHER!"
-    except TypeError:
-        g = str(guess)
-        if g == secret:
-            return "Win", "🎉 Correct!"
-        if g > secret:
-            return "Too High", "📉 Go LOWER!"
-        return "Too Low", "📈 Go HIGHER!"
+    if guess_val == secret_val:
+        return "Win", "🎉 Correct!"
+    if guess_val > secret_val:
+        return "Too High", "📉 Go LOWER!"
+    return "Too Low", "📈 Go HIGHER!"
 
 
 def get_proximity_hint(guess, secret):

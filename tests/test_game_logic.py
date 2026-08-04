@@ -99,3 +99,15 @@ def test_new_game_button_resets_state(monkeypatch):
     assert at.session_state["score"] == 100
     assert at.session_state["status"] == "playing"
     assert at.session_state["history"] == []
+
+def test_check_guess_handles_stringified_secret_correctly():
+    # Regression test: secret arrives as a string (as app.py does on even attempts),
+    # guess is much higher than secret — must say "Too High"/"Go LOWER", not flip.
+    outcome, message = check_guess(100, "14")
+    assert outcome == "Too High"
+    assert "LOWER" in message.upper()
+
+def test_check_guess_handles_int_secret_correctly():
+    outcome, message = check_guess(100, 14)
+    assert outcome == "Too High"
+    assert "LOWER" in message.upper()
