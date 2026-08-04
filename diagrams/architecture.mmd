@@ -1,0 +1,12 @@
+flowchart TD
+    A[Player Guess] --> B[Game Logic]
+    B --> C[Proximity Hint]
+    C --> D[Retrieve Tip]
+    D --> E[Gemini Coach Message]
+    E -->|API fails| F[Fallback Message]
+    E --> G[Show Result to Player]
+    F --> G
+
+    H[pytest Tests] -.checks.-> B
+    H -.checks.-> D
+    H -.checks.-> E
