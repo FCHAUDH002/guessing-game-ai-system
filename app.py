@@ -177,6 +177,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+stats_placeholder = st.empty()
+
 st.sidebar.header("Settings")
 
 difficulty = st.sidebar.selectbox(
@@ -220,17 +222,6 @@ if "status" not in st.session_state:
 
 if "history" not in st.session_state:
     st.session_state.history = []
-
-attempts_left = attempt_limit - st.session_state.attempts
-
-stat1, stat2, stat3 = st.columns(3)
-stat1.metric("⭐ Score", st.session_state.score)
-stat2.metric("❤️ Guesses Left", max(attempts_left, 0))
-stat3.metric("🎚️ Difficulty", difficulty)
-
-# Progress bar showing how many attempts are used up
-used_ratio = min(st.session_state.attempts / attempt_limit, 1.0)
-st.progress(used_ratio, text=f"Attempts used: {st.session_state.attempts} / {attempt_limit}")
 
 st.subheader("🕹️ Make your guess")
 
@@ -344,6 +335,18 @@ if submit:
                     f"💥 Out of guesses! The number was **{st.session_state.secret}**. "
                     f"Score: **{st.session_state.score}** — better luck next round!"
                 )
+
+with stats_placeholder.container():
+    attempts_left = attempt_limit - st.session_state.attempts
+
+    stat1, stat2, stat3 = st.columns(3)
+    stat1.metric("⭐ Score", st.session_state.score)
+    stat2.metric("❤️ Guesses Left", max(attempts_left, 0))
+    stat3.metric("🎚️ Difficulty", difficulty)
+
+    # Progress bar showing how many attempts are used up
+    used_ratio = min(st.session_state.attempts / attempt_limit, 1.0)
+    st.progress(used_ratio, text=f"Attempts used: {st.session_state.attempts} / {attempt_limit}")
 
 # --- Guess history strip (shown to the player, reflects the latest guess) ---
 if st.session_state.history:
